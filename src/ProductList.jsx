@@ -2,19 +2,48 @@ import React, { useState,useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
 import { addItem } from './CartSlice';
+import { useDispatch } from 'react-redux';
+
+
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
+    const dispatch = useDispatch();
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+
+    const [totalItemsInCart, setTotalItemsInCart] = useState(0);
+
+// Update this state whenever an item is added or removed
+const handleAddToCart = (product) => {
+    dispatch(addItem(product));
+    setAddedToCart((prevState) => ({ ...prevState, [product.name]: true }));
+    setTotalItemsInCart(prevCount => prevCount + 1); // Increment total items count
+};
+
+const handleRemoveFromCart = (name) => {
+    dispatch(removeItem(name));
+    setTotalItemsInCart(prevCount => prevCount - 1); // Decrement total items count
+};
+
 
     // Moi
     const [addedToCart, setAddedToCart] = useState({});
-    const handleAddToCart = (product) => {
-        dispatch(addItem(product));
-        setAddedToCart((prevState) => ({
-           ...prevState,
-           [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
-         }));
-      };
+
+    // const handleAddToCart = (product) => {
+    //     dispatch(addItem(product));
+    //     addItem: (state, action) => {
+    //         const { name, image, cost } = action.payload;
+    //         const existingItem = state.items.find(item => item.name === name);
+    //         if (existingItem) {
+    //           existingItem.quantity++;
+    //         } else {
+    //           state.items.push({ name, image, cost, quantity: 1 });
+    //         }
+    //       },
+    //     setAddedToCart((prevState) => ({
+    //        ...prevState,
+    //        [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
+    //      }));
+    //   };
 
     const plantsArray = [
         {
